@@ -22,7 +22,8 @@ fetch('story.json')
   })
 
       .then(storyContent => {
-        const story = new inkjs.Story(storyContent);
+       const story = new Story(storyContent);
+
         console.log("Story loaded:", story);
         const storyContainer = document.getElementById('story');
 function continueStory() {
