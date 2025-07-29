@@ -14,8 +14,12 @@
 <body>
   <div id="story">Loading story...</div>
   <script>
-    fetch('story.json')
-      .then(response => response.json())
+fetch('story.json')
+  .then(response => {
+    console.log("Fetch response:", response);
+    return response.json();
+  })
+
       .then(storyContent => {
         const story = new inkjs.Story(storyContent);
         console.log("Story loaded:", story);
