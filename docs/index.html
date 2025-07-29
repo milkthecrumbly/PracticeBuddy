@@ -18,6 +18,7 @@
       .then(response => response.json())
       .then(storyContent => {
         const story = new inkjs.Story(storyContent);
+        console.log("Story loaded:", story);
         const storyContainer = document.getElementById('story');
 function continueStory() {
   while(story.canContinue) {
