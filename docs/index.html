@@ -18,6 +18,7 @@
       .then(response => response.json())
       .then(json => {
         const story = new inkjs.Story(json);
+        document.getElementById("loading").style.display = "none";
         const storyContainer = document.getElementById('story');
 
         function continueStory() {
