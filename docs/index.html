@@ -1,23 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8" />
-  <title>Practice Buddy</title>
-  <script src="ink.min.js"></script>
-  <style>
-    body { font-family: sans-serif; max-width: 600px; margin: 2em auto; line-height: 1.6; }
-    #story { white-space: pre-wrap; }
-    .choice { color: blue; cursor: pointer; text-decoration: underline; }
-  </style>
-</head>
 <body>
-  <div id="story">Loading story...</div>
+  <div id="loading">Loading story...</div>
+  <div id="story"></div>
 
   <script>
     fetch('story.json')
       .then(response => response.json())
       .then(json => {
         const story = new inkjs.Story(json);
+        document.getElementById("loading").style.display = "none";
         const storyContainer = document.getElementById('story');
 
         function continueStory() {
@@ -41,7 +31,10 @@
         }
 
         continueStory();
+      })
+      .catch(err => {
+        console.error("Failed to load story:", err);
+        document.getElementById("loading").textContent = "Error loading story.";
       });
   </script>
 </body>
-</html>
