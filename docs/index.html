@@ -1,50 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8" />
-  <title>Practice Buddy</title>
-  <script src="ink.min.js"></script>
-  <style>
-    body { font-family: sans-serif; max-width: 600px; margin: 2em auto; line-height: 1.6; }
-    #story { white-space: pre-wrap; }
-    .choice { color: blue; cursor: pointer; text-decoration: underline; }
-  </style>
-</head>
-<body>
-<div id="loading">Loading story...</div>
-<div id="story"></div>
+<script>
+  fetch('story.json')
+    .then(response => response.json())
+    .then(json => {
+      const story = new inkjs.Story(json);
 
+      const storyContainer = document.getElementById('story');
+      const loadingContainer = document.getElementById('loading');
 
-  <script>
-    fetch('story.json')
-      .then(response => response.json())
-      .then(json => {
-        const story = new inkjs.Story(json);
-        document.getElementById("loading").style.display = "none";
-        const storyContainer = document.getElementById('story');
+      // Hide the loading message now that story is ready
+      loadingContainer.style.display = "none";
 
-        function continueStory() {
-          while (story.canContinue) {
-            const paragraph = document.createElement('p');
-            paragraph.textContent = story.Continue();
-            storyContainer.appendChild(paragraph);
-          }
-
-          story.currentChoices.forEach((choice, index) => {
-            const choicePara = document.createElement('p');
-            choicePara.className = 'choice';
-            choicePara.textContent = choice.text;
-            choicePara.addEventListener('click', () => {
-              story.ChooseChoiceIndex(index);
-              storyContainer.innerHTML = '';
-              continueStory();
-            });
-            storyContainer.appendChild(choicePara);
-          });
+      function continueStory() {
+        while (story.canContinue) {
+          const paragraph = document.createElement('p');
+          paragraph.textContent = story.Continue();
+          storyContainer.appendChild(paragraph);
         }
 
-        continueStory();
-      });
-  </script>
-</body>
-</html>
+        story.currentChoices.forEach((choice, index) => {
+          const choicePara = document.createElement('p');
+          choicePara.className = 'choice';
+          choicePara.textContent = choice.text;
+          choicePara.addEventListener('click', () => {
+            story.ChooseChoiceIndex(index);
+            storyContainer.innerHTML = '';
+            continueStory();
+          });
+          storyContainer.appendChild(choicePara);
+        });
+      }
+
+      continueStory();
+    })
+    .catch(err => {
+      document.getElementById('loading').textContent = "Error loading story.";
+      console.error("Story failed to load:", err);
+    });
+</script>
